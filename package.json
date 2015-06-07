@@ -1,6 +1,6 @@
 {
   "name": "cmdio",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Execute cmd.exe commands in native bash shell.",
   "main": "index.js",
   "preferGlobal": true,
@@ -23,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/cchamberlain/cmdio/issues"
   },
-  "homepage": "https://github.com/cchamberlain/cmdio#readme"
+  "homepage": "https://github.com/cchamberlain/cmdio#readme",
+  "scripts": {}
 }
