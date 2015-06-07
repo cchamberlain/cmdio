@@ -1,0 +1,27 @@
+{
+  "name": "cmdio",
+  "version": "0.1.0",
+  "description": "Execute cmd.exe commands in native bash shell.",
+  "main": "index.js",
+  "preferGlobal": true,
+  "directories": {
+    "bin": "bin",
+    "man": "man",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cchamberlain/cmdio.git"
+  },
+  "keywords": [
+    "cmd.exe",
+    "cli",
+    "nodejs"
+  ],
+  "author": "Cole Chamberlain",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cchamberlain/cmdio/issues"
+  },
+  "homepage": "https://github.com/cchamberlain/cmdio#readme"
+}
