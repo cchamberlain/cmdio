@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+
+set -e
+
+. ./constants
+
+
+global_module_root() {
+  printf -- "%s/%s" "$GLOBAL_NODE_MODULES_ROOT" "$1"
+}
+
+print_out() {
+  if [ -z "$1" ]; then
+    printf -- "%b- must specify message to print -%b\n" "$RED" "$NC" >&2
+  fi
+  printf -- "%s" "$1"
+}
+
+print_message() {
+  if [ -z "$1" ]; then
+    printf -- "%b- must specify message to print -%b\n" "$RED" "$NC" >&2
+  fi
+  message="$1"
+  color="${2-"$NC"}"
+  printf -- "%b- %b -%b\n" "$color" "$message" "$NC" >&2
+}
+
+print_error() {
+  print_message "$1" "$RED"
+}
+
+print_info() {
+  print_message "$1" "$CYAN"
+}
+
+print_success() {
+  print_message "$1" "$GREEN"
+}
+
+
+optsh() {
+  if [ -z "$1" ]; then
+    print_error "must specify options to accept"
+  fi
+  if [ -z "$2" ]; then
+    print_error "must specify short usage string"
+  fi
+
+  options="$1"
+  usage_short="$2"
+  usage_long="${3-"$usage_short"}"
+
+  shopt -u nocasematch
+  OPTIND=1
+  while getopts "$options" opt; do
+    case "$opt" in
+    n )
+    ;;
+    h )
+      print_message "$usage_long"
+      exit 0
+      ;;
+    \?)
+      print_error "unknown option: -$OPTARG"
+      print_error "$usage_short"
+      exit 1
+      ;;
+    : )
+      print_error "missing option argument for: -$OPTARG"
+      print_error "$usage_short"
+      exit 1
+      ;;
+    * )
+      if ! grep -q $OPTARG <<< "$options" ; then
+        print_error "unimplemented option: -$OPTARG"
+        print_error "$usage_short"
+        exit 1
+      fi
+      print_out "$OPTARG"
+    esac
+  done
+  shift $((OPTIND-1))
+
+  while (( "$#" )); do
+    printf -- "%s" "$1"
+    shift
+  done
+}
+
+loc() {
+  if [ -z "$1" ]; then
+    print_error "must specify a local package to execute"
+  fi
+  package_name="$1"
+  shift
+
+  local_package = "$CMDIO_NODE_MODULES_ROOT/.bin/$package_name"
+
+  "$local_package" "$@"
+}
+
+pin_taskbar() {
+  if [ -z "$1" ]; then
+    print_error "must specify application path to pin"
+  fi
+  app_path="$1"
+  powershell -command "Import-Module $PINNED_APPLICATIONS_PATH; Set-PinnedApplication -Action PinToTaskbar -FilePath $app_path"
+  print_success "$(basename "$app_path") pinned successfully"
+}
+
+unpin_taskbar() {
+  if [ -z "$1" ]; then
+    print_error "must specify application path to unpin"
+  fi
+  app_path="$1"
+  powershell -command "Import-Module $PINNED_APPLICATIONS_PATH; Set-PinnedApplication -Action UnPinFromTaskbar -FilePath $app_path"
+  print_success "$(basename "$app_path") unpinned successfully"
+}
+
+export -f global_module_root
+export -f print_message
+export -f print_error
+export -f print_success
+export -f optsh
+export -f pin_taskbar
+export -f unpin_taskbar

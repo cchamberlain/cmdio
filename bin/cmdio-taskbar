@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+
+. "${CMDIO_HOME-"$HOME/.cmdio"}/cmdiorc"
+
+pushd "$CMDIO_USER_ROOT" >/dev/null
+  print_info "upgrading cmdio"
+  npm install
+  print_success "cmdio successfully upgraded"
+popd
+

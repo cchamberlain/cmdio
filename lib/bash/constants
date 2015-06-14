@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+
+set -e
+
+# ROOT=DIRECTORIES #
+
+export GLOBAL_NODE_MODULES_ROOT="/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules"
+
+export CMDIO_GLOBAL_ROOT="$GLOBAL_NODE_MODULES_ROOT/cmdio"
+export CMDIO_GLOBAL_BIN_ROOT="$CMDIO_GLOBAL_ROOT/bin"
+export CMDIO_GLOBAL_LIB_ROOT="$CMDIO_GLOBAL_ROOT/lib"
+export CMDIO_GLOBAL_LIB_BASH_ROOT="$CMDIO_GLOBAL_LIB_ROOT/bash"
+export CMDIO_GLOBAL_LIB_PS_ROOT="$CMDIO_GLOBAL_LIB_ROOT/ps"
+
+export CMDIO_ROOT="$HOME/.cmdio"
+export CMDIO_BIN_ROOT="$CMDIO_ROOT/bin"
+export CMDIO_LIB_ROOT="$CMDIO_ROOT/lib"
+export CMDIO_LIB_BASH_ROOT="$CMDIO_LIB_ROOT/bash"
+export CMDIO_LIB_PS_ROOT="$CMDIO_LIB_ROOT/ps"
+
+export CMDIO_RC_PATH="$CMDIO_ROOT/cmdiorc"
+
+export CMDIO_NODE_MODULES_ROOT="$CMDIO_ROOT/node_modules"
+
+
+# PATH=FILES #
+
+export PINNED_APPLICATIONS_PATH="$CMDIO_LIB_PS_ROOT/PinnedApplications.psm1"
+
+
+# ANSI COLORS #
+
+export NC='\033[0m'
+export BLACK='\033[0;30m'
+export RED='\033[0;31m'
+export GREEN='\033[0;32m'
+export BROWN_ORANGE='\033[0;33m'
+export BLUE='\033[0;34m'
+export PURPLE='\033[0;35m'
+export CYAN='\033[0;36m'
+export LIGHT_GRAY='\033[0;37m'
+export DARK_GRAY='\033[1;30m'
+export LIGHT_RED='\033[1;31m'
+export LIGHT_GREEN='\033[1;32m'
+export YELLOW='\033[1;33m'
+export LIGHT_BLUE='\033[1;34m'
+export LIGHT_PURPLE='\033[1;35m'
+export LIGHT_CYAN='\033[1;36m'
+export WHITE='\033[1;37m'
+
+
+# PLATFORM #
+
+PLATFORM="unknown"
+PNAME="unknown"
+
+unix_name=$(uname)
+shopt -s nocasematch
+case "$unix_name" in
+  *unix*)
+    PLATFORM="unix"
+    ;;
+  *linux*)
+    PLATFORM="linux"
+    ;;
+  *freebsd*)
+    PLATFORM="freebsd"
+    ;;
+  *darwin*)
+    PLATFORM="osx"
+    ;;
+  *windows*|*ming*)
+    PLATFORM="windows"
+    ;;
+esac
+
+case "$PLATFORM" in
+  linux|unix|freebsd|osx)
+  PNAME="unix"
+  ;;
+  windows)
+  PNAME="windows"
+  ;;
+  *)
+  >&2 echo "Unable to classify the system OS -> uname: $unix_name, PLATFORM: $PLATFORM"
+  exit 1
+esac
+
+export PLATFORM
+export PNAME

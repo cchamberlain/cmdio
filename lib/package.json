@@ -1,0 +1,21 @@
+{
+  "name": "cmdio-local",
+  "version": "1.0.0",
+  "description": "Execute cmd.exe commands in native bash shell.",
+  "main": "cmdiorc",
+  "author": "Cole Chamberlain",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cchamberlain/cmdio/issues"
+  },
+  "homepage": "http://www.cmdio.com",
+  "scripts": {},
+  "dependencies": {
+    "rimraf": "latest",
+    "mkdirp": "latest",
+    "lodash": "latest",
+    "cpath": "latest",
+    "junc": "latest",
+    "tmper": "latest"
+  }
+}

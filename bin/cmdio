@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -e
+
+CMDIO_USER_ROOT="${CMDIO_HOME-"$HOME"}/.cmdio"
+if [ ! -d "$CMDIO_USER_ROOT" ] || [ "$1" = "--reinstall" ]; then
+  cp -rf "/$(npm config get prefix -p | tr -d ':' | sed 's/\\/\//g')/node_modules/cmdio/lib" "$CMDIO_USER_ROOT"
+  pushd "$CMDIO_USER_ROOT" >/dev/null
+    npm install &>/dev/null
+  popd >/dev/null
+fi
+. "$CMDIO_USER_ROOT/cmdiorc"
+
+
+usage_short="${BLUE}usage: cmdio [--reinstall] <command> <opts>"
+
+usage_long="$usage_short\n\tupgrade: upgrades cmdio and its tools"
+usage_long="$usage_long\n\tuninstall: uninstalls cmdio from $CMDIO_USER_ROOT"
+usage_long="$usage_long\n\ttaskbar: pin and unpin from taskbar"
+
+usage_long="$usage_long\n\tuse cmdio <command> -h to get command specific help${NC}"
+
+usage_short="$usage_short\nuse -h to get supported command information${NC}"
+
+OPTIND=1
+if [ "$#" == "0" ] ; then
+  print_message "$usage_short"
+  exit 1
+fi
+
+command="$1"
+shift
+
+if [ "$command" = "-h" ] ; then
+  print_message "$usage_long"
+  exit 0
+fi
+
+cmdio-"$command" "$@"
