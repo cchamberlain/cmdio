@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+msys2_url="http://downloads.sourceforge.net/project/msys2/Base/x86_64/msys2-x86_64-20150512.exe?r=&ts=1434345437&use_mirror=superb-dca2"
+
+cmdio install -x -u "$msys2_url"

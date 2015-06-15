@@ -9,17 +9,29 @@ set -e
 dest_root=""
 
 command="cmdio install"
-z_flag="z+zip: installs zip or 7z file"
-u_opt="u+url: install from url source"
-l_opt="l+local: install from local source"
-b_opt="b+bin: create bin link to path"
-dest_root_arg="dest: destination install path (default: $dest_root)"
+i_flag="!i+internal: npm installs internal cmdio dependencies"
+z_flag="!z+zip: installs zip or 7z file"
+x_flag="!x+exe: installs executable"
+m_flag="!m+msi: installs executable"
+u_opt=":u+url: install from url source"
+l_opt=":l+local: install from local source"
+b_opt=":b+bin: create bin link to path"
+dest_root_arg="&dest: destination install path (default: $dest_root)"
 
-options="$(optsh "$command\n!$z_flag\n:$u_opt\n:$l_opt\n:$b_opt\n&$dest_root_arg")"
+options="$(optsh "$command\n!$z_flag\n!$x_flag\n!$m_flag\n:$u_opt\n:$l_opt\n:$b_opt\n&$dest_root_arg")"
 while getopts "$options" opt; do
   case "$opt" in
+    i )
+      internal_flag=true
+      ;;
     z )
       zip_flag=true
+      ;;
+    x )
+      exe_flag=true
+      ;;
+    m )
+      msi_flag=true
       ;;
     u )
       url_opt="$OPTARG"
@@ -32,9 +44,13 @@ while getopts "$options" opt; do
       ;;
   esac
 done
-pushd "$CMDIO_USER_ROOT" >/dev/null
+
+if "$internal_flag" = true ] ; then
   print_info "upgrading cmdio packages"
-  npm install
+  pushd "$CMDIO_USER_ROOT" >/dev/null
+    npm install
+  popd
   print_success "cmdio packages successfully upgraded"
-popd
+fi
+
 
